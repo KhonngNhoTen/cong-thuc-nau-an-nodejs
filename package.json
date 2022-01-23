@@ -1,0 +1,33 @@
+{
+  "name": "cong-thuc-nau-an_nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KhonngNhoTen/Cong-thuc-nau-an-BE-Nodejs.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KhonngNhoTen/Cong-thuc-nau-an-BE-Nodejs/issues"
+  },
+  "homepage": "https://github.com/KhonngNhoTen/Cong-thuc-nau-an-BE-Nodejs#readme",
+  "dependencies": {
+    "body-parser": "^1.19.1",
+    "cors": "^2.8.5",
+    "debug": "^4.3.3",
+    "dotenv": "^14.2.0",
+    "express": "^4.17.2",
+    "md5": "^2.3.0",
+    "mongoose": "^6.1.7"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
