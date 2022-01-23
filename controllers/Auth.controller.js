@@ -2,15 +2,26 @@ const md5 = require('md5');
 const User = require('../models/User');
 const createUser = require('../services/createUser.service');
 const updateUser = require('../services/updateUser.service');
+const jwt = require('jsonwebtoken');
 class AuthController {
     async login(req, res) {
         req.body.password = md5(req.body.password);
         const result = await User.findOne(req.body);
         if (result) {
-            res.status(201).json({
-                message: 'Login successfully',
-                success: true
-            });
+            jwt.sign(
+                { data: result.id },
+                process.env.PRIVATE_KEY,
+                { expiresIn: '1d' },
+                (error, token) => {
+                    if(!error)
+                    res.status(201).json({
+                        message: 'Login successfully',
+                        success: true,
+                        token: token
+                    });
+                }
+            );
+           
         } else {
             res.status(500).json({
                 message: 'Login fail',
@@ -22,8 +33,20 @@ class AuthController {
         const userID = req.params.id;
         if (!userID) {
             // luu
-            await createUser(req.body)
-            res.status(201).send('Create new user successfully');
+            const user = await createUser(req.body);
+            jwt.sign(
+                { data: user.id },
+                process.env.PRIVATE_KEY,
+                { expiresIn: '1d' },
+                (error, token) => {
+                    if(!error)
+                    res.status(201).json({
+                        message: 'Create user successfully',
+                        success: true,
+                        token: token
+                    });
+                }
+            );
         } else {
             // cap nhat
             try {

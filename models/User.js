@@ -2,7 +2,11 @@ const connection = require('../config/database');
 const Schema = connection.Schema;
 const UserSchema = new Schema({
     email: String,
-    password: String
+    password: String,
+    menu: [{
+        type: Schema.Types.ObjectId,
+        ref: 'menus'
+    }]
 }, {
     collection: 'users'
 });
