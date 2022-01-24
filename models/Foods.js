@@ -3,9 +3,9 @@ const Schema = connection.Schema;
 const foodSchema = new Schema({
     cookingRecipe: String,
     doing: String,
-    imgId: Schema.Types.ObjectId
-    }, {
-        collection: 'foods'
+    imgSrc: String
+}, {
+    collection: 'foods'
 });
 
 const food = connection.model('foods', foodSchema);

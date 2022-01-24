@@ -4,13 +4,12 @@ const jwt = require('jsonwebtoken');
 class MenuController {
 
     async getAllMenu(req, res) {
-        const menus =
-            await User.findById(res.locals.userId)
+       await User.findById(res.locals.userId)
                 .populate('menus')
                 .then(rs => {
                     res
                         .status(200)
-                        .json({ menus: menus })
+                        .json({ menus: rs.menus })
                 })
                 .catch(err => {
                     console.log(err);
@@ -42,10 +41,10 @@ class MenuController {
         const menuID = req.params.id;
         if (!menuID) {
             try {
-                console.log(User.methods)
-                const menu = await Menu.save(req.body);
+                const menu = await new Menu(req.body);
+                await menu.save();
                 const user = await User.findById(res.locals.userId);
-                user.menu.push(menu._id);
+                user.menus.push(menu._id);
                 await user.save();
                 res.status(201).json({
                     success: true,
@@ -76,11 +75,17 @@ class MenuController {
         }
     }
 
-    async deleteMenu() {
+    async deleteMenu(req, res) {
         const id = req.params.id;
         await Menu.deleteOne({ _id: id })
-            .exec(() => {
-                res.json({
+            .then( async () => {
+                const user = await User.findById(res.locals.userId);
+                const index = user.menus.indexOf(id);
+                if (index !== -1) {
+                    user.menus.splice(index, 1);
+                    user.save();
+                }
+                res.status(204).json({
                     success: true,
                     message: 'Delete Menu successfully'
                 });

@@ -2,7 +2,13 @@ const express = require('express');
 const router = express.Router();
 const AuthController = require('../controllers/Auth.controller');
 const MenuController = require('../controllers/Menu.controller');
+const FoodController = require('../controllers/Food.controller');
+
+
 const authMiddleWare = require('../middlewares/auth.middleware');
+const upload = require('../middlewares/uploadImage.middleware');
+
+
 // routing cho authentication
 router.post('/login',AuthController.login);
 router.post('/register', AuthController.save);
@@ -20,7 +26,10 @@ router.put('/menu/:id',MenuController.saveMenu);
 
 
 // routing cho food
-
+router.post('/menu/:menuId/food',upload.singleUpload('img') ,FoodController.save);
+router.get('/menu/:menuId/food',FoodController.getAllFoods);
+router.post('/menu/:menuId/food/:id',FoodController.save);
+router.delete('/menu/:menuId/food/:id',FoodController.delete);
 
 
 

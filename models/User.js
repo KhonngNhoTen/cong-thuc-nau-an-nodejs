@@ -3,7 +3,7 @@ const Schema = connection.Schema;
 const UserSchema = new Schema({
     email: String,
     password: String,
-    menu: [{
+    menus: [{
         type: Schema.Types.ObjectId,
         ref: 'menus'
     }]
