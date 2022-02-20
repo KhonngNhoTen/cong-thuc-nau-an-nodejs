@@ -5,6 +5,7 @@ const updateUser = require('../services/updateUser.service');
 const jwt = require('jsonwebtoken');
 class AuthController {
     async login(req, res) {
+        console.log(req.body);
         req.body.password = md5(req.body.password);
         const result = await User.findOne(req.body);
         if (result) {
@@ -23,7 +24,7 @@ class AuthController {
             );
            
         } else {
-            res.status(500).json({
+            res.json({
                 message: 'Login fail',
                 success: false
             });
@@ -63,7 +64,10 @@ class AuthController {
     async setEmail(req, res) {
         res.send('email');
     }
-
+    
+    async checkToken(req, res) {
+        res.send("Token's valid");
+    }
 }
 
 

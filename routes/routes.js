@@ -13,7 +13,7 @@ const upload = require('../middlewares/uploadImage.middleware');
 router.post('/login',AuthController.login);
 router.post('/register', AuthController.save);
 router.post('/set-email', AuthController.setEmail);
-
+router.post('/check-token', authMiddleWare, AuthController.checkToken);
 
 // routing cho menu
 router.use('/menu',authMiddleWare);
