@@ -12,7 +12,12 @@ module.exports = (req, res, next) => {
             (err, data) => {
                 if (err) {
                     console.log(err);
-                    res.sendStatus(403);
+                    if(err.name === 'TokenExpiredError') {
+                        res.status(401).json({msg: 'jwt expired'});
+                    }
+                    else
+                       res.status(403).json({msg: 'error'});
+                    return;   
                 }
                 else {
                     res.locals.userId = data.data;

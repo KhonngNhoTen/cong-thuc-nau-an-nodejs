@@ -9,20 +9,26 @@ class AuthController {
         req.body.password = md5(req.body.password);
         const result = await User.findOne(req.body);
         if (result) {
-            jwt.sign(
-                { data: result.id },
-                process.env.PRIVATE_KEY,
-                { expiresIn: '1d' },
-                (error, token) => {
-                    if(!error)
-                    res.status(201).json({
-                        message: 'Login successfully',
-                        success: true,
-                        token: token
-                    });
-                }
-            );
-           
+            // jwt.sign(
+            //     { data: result.id },
+            //     process.env.PRIVATE_KEY,
+            //     { expiresIn: '1d' },
+            //     (error, token) => {
+            //         if(!error)
+            //         res.status(201).json({
+            //             message: 'Login successfully',
+            //             success: true,
+            //             token: token
+            //         });
+            //     }
+            // );
+            const token = await result.getAccessToken();
+            const refeshToken = await result.getRefeshToken();
+            res.json({
+                token: token, 
+                refeshToken: refeshToken,
+                success: true
+            });
         } else {
             res.json({
                 message: 'Login fail',
@@ -40,19 +46,19 @@ class AuthController {
                 process.env.PRIVATE_KEY,
                 { expiresIn: '1d' },
                 (error, token) => {
-                    if(!error)
-                    res.status(201).json({
-                        message: 'Create user successfully',
-                        success: true,
-                        token: token
-                    });
+                    if (!error)
+                        res.status(201).json({
+                            message: 'Create user successfully',
+                            success: true,
+                            token: token
+                        });
                 }
             );
         } else {
             // cap nhat
             try {
                 await updateUser();
-                res.status(201).send('Update new user fail');
+                res.status(201).json({msg: 'Update new user fail'});
             } catch (error) {
                 console.log(error);
                 res.status(501).send('Update user successfully');
@@ -64,9 +70,13 @@ class AuthController {
     async setEmail(req, res) {
         res.send('email');
     }
-    
-    async checkToken(req, res) {
-        res.send("Token's valid");
+
+    async refeshToken (req, res) {
+        const token = req.headers['authorization'];
+        const user = new User();
+        const token_ = await user.getAccessToken();
+        if( await user.verifyToken(token)) res.json({ok: true,token:token_ });
+        else res.json({ok:false});
     }
 }
 

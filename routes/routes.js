@@ -10,10 +10,10 @@ const upload = require('../middlewares/uploadImage.middleware');
 
 
 // routing cho authentication
-router.post('/login',AuthController.login);
+router.post('/login',AuthController.login);  /* admin accoount: admin@email.com | password: 12345 */
 router.post('/register', AuthController.save);
 router.post('/set-email', AuthController.setEmail);
-router.post('/check-token', authMiddleWare, AuthController.checkToken);
+router.post('/refesh-token', AuthController.refeshToken);
 
 // routing cho menu
 router.use('/menu',authMiddleWare);

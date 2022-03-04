@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 class MenuController {
 
     async getAllMenu(req, res) {
+        console.log(res.locals.userId);
        await User.findById(res.locals.userId)
                 .populate('menus')
                 .then(rs => {
